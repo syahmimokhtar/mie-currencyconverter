@@ -9,11 +9,11 @@ export default function Home() {
 
   const [options, selectionOptions] = useState([]); //dropdown values
   const [inputValue, setInputValue] = useState(1000); //amount to be converted 
-  const [convertedAmount, setConvertedAmount] = useState(); //converted amount
+  const [convertedAmount, setConvertedAmount] = useState(0); //converted amount
   const [selectedCurrency, setSelectedCurrency] = useState({ value: 'MYR', label: 'Malaysian Ringgit' }); // State to track selected currency
   const [selectedConvertedCurrency, setselectedConvertedCurrency] = useState({ value: 'JPY', label: 'Japanese Yen' }); // State to track selected currency
   const [dropdownOpen, setdropdownOpen] = useState(true); //state to dropdown appear
-
+  const [editingField, setEditingField] = useState('amount'); // Track which field is being edited
 
   //populate dropdown data
   const handleSelection = async () => {
@@ -41,14 +41,21 @@ export default function Home() {
   }
 
   //
-  const handleConversionRate = async (amount, fromCurrency, toCurrency) => {
+  const handleConversionRate = async (amount, fromCurrency, toCurrency, field) => {
     if (fromCurrency && toCurrency && amount) {
       try {
         const headers = { 'Content-Type': 'application/json' };
         const response = await api.get(`/pair/${fromCurrency.value}/${toCurrency.value}/${amount}`, { headers: headers });
         const data=response.data
         console.log(data)
-       setConvertedAmount(data.conversion_result.toFixed(2));
+
+        if(field=='amount'){
+          setConvertedAmount(data.conversion_result.toFixed(2));
+        }
+        else if(field=="convertedAmount"){
+          setConvertedAmount(data.conversion_result.toFixed(2));
+        }
+
       } catch (error) {
         console.error('Error fetching conversion rate', error);
       }
@@ -56,12 +63,23 @@ export default function Home() {
   };
 
 
-  const handleInputChange = (e) => {
+  const handleInputAmount= (e) => {
     const value = e.target.value;
     setInputValue(value);
-    handleConversionRate(1000, selectedCurrency, selectedConvertedCurrency);
+    setEditingField('amount')
+    handleConversionRate(1000, selectedCurrency, selectedConvertedCurrency, 'amount');
   
   }
+
+  
+  const handleInputConverted = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+    setEditingField('convertedAmount')
+    handleConversionRate(1000, selectedCurrency, selectedConvertedCurrency, 'convertedAmount');
+  
+  }
+
 
    // Handle from currency dropdown change
    const handleFromCurrencyChange = (selectedOption) => {
@@ -78,7 +96,8 @@ export default function Home() {
 
   useEffect(() => {
     handleSelection();
-    handleConversionRate(inputValue, selectedCurrency, selectedConvertedCurrency);
+    handleConversionRate(inputValue, selectedCurrency, selectedConvertedCurrency, editingField);
+
   }, [])
 
 
@@ -95,7 +114,8 @@ export default function Home() {
           <div className='relative mx-12 my-12  flex flex-row'>
             <div className='relative  mx-12 my-12  flex flex-col'>
               <label className="ml-4  mx-auto text-2xl text-black font-bold">Amount</label>
-              <Input searchQuery={inputValue} handleChange={handleInputChange} />
+              <Input searchQuery={inputValue} handleChange={handleInputAmount}  type="number"
+                      pattern="[0-9]*" />
 
               {dropdownOpen && (
                 <Dropdown
@@ -117,7 +137,8 @@ export default function Home() {
             <div className='relative  mx-12 my-12  flex flex-col'>
               <label className="ml-4  mx-auto text-2xl text-black font-bold">Converted to</label>
 
-              <Input searchQuery={convertedAmount} handleChange={()=>{}}/>
+              <Input searchQuery={convertedAmount}  handleChange={handleInputConverted}   type="number"
+                       pattern="[0-9]*"/>
 
               {dropdownOpen && (
                 <Dropdown
