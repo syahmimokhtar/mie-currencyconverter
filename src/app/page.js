@@ -127,7 +127,7 @@ export default function Home() {
             <h2 className="relative text-2xl text-center font-bold text-nowrap	">Currency Exchange</h2>
      
 
-        <div className="relative md:px-12 md:py-12 md:grid md:grid-cols-2 container w-auto  md:w-auto   bg-white rounded-xl mb-12">
+        <div className="relative md:px-12 md:py-12 md:grid md:grid-cols-2  w-auto  md:w-auto   bg-white rounded-xl mb-12">
 
 
 
@@ -166,8 +166,8 @@ export default function Home() {
 
           </div>
 
-          
-            <h3 className="md:ml-6 text-black text-xl font-bold text-nowrap">{rate}</h3>
+            
+            <h3 className="px-4 py-4 text-center md:ml-6 text-black text-xl font-bold  md:text-nowrap text-balance">{rate}</h3>
         </div>
         <Footer />
 
