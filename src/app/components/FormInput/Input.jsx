@@ -8,7 +8,7 @@ import React from 'react'
      onChange={handleChange}
      placeholder={placeholder}
      style={{ color:"black"}}
-     className="container  border border-black w-80 h-12 relative w-full rounded-md px-4 my-4 mx-4"
+     className="container  border border-black md:w-full w-80 h-12 relative  rounded-md px-4 my-4 mx-4"
      />
   )
 }
