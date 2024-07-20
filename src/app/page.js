@@ -34,7 +34,6 @@ export default function Home() {
       }
 
 
-
     } catch (error) {
       console.error('Error fetching data', error);
     }
@@ -82,7 +81,7 @@ export default function Home() {
     const value = e.target.value;
     setInputValue(value);
     setEditingField('amount')
-    handleConversionRate(1000, selectedCurrency, selectedConvertedCurrency, 'amount');
+    handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'amount');
 
   }
 
@@ -92,7 +91,7 @@ export default function Home() {
     const value = e.target.value;
     setConvertedAmount(value);
     setEditingField('convertedAmount')
-    handleConversionRate(1000, selectedCurrency, selectedConvertedCurrency, 'convertedAmount');
+    handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'convertedAmount');
   }
 
 
