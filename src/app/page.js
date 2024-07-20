@@ -14,7 +14,7 @@ export default function Home() {
   const [selectedConvertedCurrency, setselectedConvertedCurrency] = useState({ value: 'JPY', label: 'Japanese Yen' }); // State to track selected currency
   const [dropdownOpen, setdropdownOpen] = useState(true); //state to dropdown appear
   const [editingField, setEditingField] = useState('amount'); // Track which field is being edited
-  const [rate, setRate] = useState(''); // Track which field is being edited
+  const [rate, setRate] = useState(''); // print rate of each conversion based on currency
 
   //populate dropdown data
   const handleSelection = async () => {
@@ -45,32 +45,40 @@ export default function Home() {
     if (fromCurrency && toCurrency && amount) {
       try {
         const headers = { 'Content-Type': 'application/json' };
-
+        let response, data, conversionRate;
 
         if (field === 'amount') {
-          const response = await api.get(`/pair/${fromCurrency.value}/${toCurrency.value}/${amount}`, { headers: headers });
-          const data = response.data
+           response = await api.get(`/pair/${fromCurrency.value}/${toCurrency.value}/${amount}`, { headers: headers });
+           data = response.data
           setConvertedAmount(data.conversion_result.toFixed(2));
-          const conversionRate= `1.000 ${fromCurrency.value} = ${data.conversion_rate.toFixed(2)}  ${toCurrency.value} (Last Updated:  ${data.time_last_update_utc})`
-          setRate(conversionRate)
+          conversionRate= `1.000 ${fromCurrency.value} = ${data.conversion_rate.toFixed(2)}  ${toCurrency.value} (Last Updated:  ${data.time_last_update_utc})`
+
         }
         else if (field === "convertedAmount") {
-          const response = await api.get(`/pair/${toCurrency.value}/${fromCurrency.value}/${amount}`, { headers: headers });
-          const data = response.data
-          // console.log(data)
+          response = await api.get(`/pair/${toCurrency.value}/${fromCurrency.value}/${amount}`, { headers: headers });
+          data = response.data
           setInputValue(data.conversion_result.toFixed(2));
-          const conversionRate= `1.000 ${toCurrency.value} = ${data.conversion_rate.toFixed(2)}  ${fromCurrency.value} (Last Updated:  ${data.time_last_update_utc})`
-          setRate(conversionRate)
+          conversionRate= `1.000 ${fromCurrency.value} = ${data.conversion_rate.toFixed(2)}  ${toCurrency.value} (Last Updated:  ${data.time_last_update_utc})`
+
         }
+        setRate(conversionRate);
+
 
       } catch (error) {
         console.error('Error fetching conversion rate', error);
+        setRate('');
+
       }
+    }
+    else{
+      setRate('');
+
     }
   };
 
 
   const handleInputAmount = (e) => {
+    setRate('')
     const value = e.target.value;
     setInputValue(value);
     setEditingField('amount')
@@ -80,34 +88,38 @@ export default function Home() {
 
 
   const handleInputConverted = (e) => {
+    setRate('')
     const value = e.target.value;
     setConvertedAmount(value);
     setEditingField('convertedAmount')
     handleConversionRate(1000, selectedCurrency, selectedConvertedCurrency, 'convertedAmount');
-
   }
 
 
   // Handle from currency dropdown change
   const handleFromCurrencyChange = (selectedOption) => {
     setSelectedCurrency(selectedOption);
+    setRate('')
     if (editingField === 'amount') {
       handleConversionRate(inputValue, selectedOption, selectedConvertedCurrency, 'amount');
     }
     else {
       handleConversionRate(convertedAmount, selectedOption, selectedConvertedCurrency, 'convertedAmount');
     }
+
   };
 
   // Handle to currency dropdown change
   const handleToCurrencyChange = (selectedOption) => {
     setselectedConvertedCurrency(selectedOption);
+    setRate('')
     if (editingField === 'amount') {
-      handleConversionRate(inputValue, selectedOption, selectedConvertedCurrency, 'amount');
+      handleConversionRate(inputValue, selectedCurrency, selectedOption, 'amount');
     }
     else {
-      handleConversionRate(convertedAmount, selectedCurrency, selectedOption, editingField);
+      handleConversionRate(convertedAmount, selectedCurrency, selectedOption,  'convertedAmount');
     }
+
   };
 
 
