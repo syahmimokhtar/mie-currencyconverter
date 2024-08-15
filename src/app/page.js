@@ -15,16 +15,8 @@ export default function Home() {
   const [dropdownOpen, setdropdownOpen] = useState(true); //state to dropdown appear
   const [editingField, setEditingField] = useState('amount'); // Track which field is being edited
   const [rate, setRate] = useState(''); // print rate of each conversion based on currency
-
   const[isValid, setIsValid]=useState(true);
 
-  const handleInputChange=(e)=>
-  {
-    const {value}=e.target;
-    const isValid = /^[0-9]*$/.test(value); // Check if the input contains only numbers
-    setIsValid(isValid);
-
-  }
 
 
   //populate dropdown data
@@ -155,11 +147,8 @@ export default function Home() {
 
       <main className="flex flex-col min-h-screen  items-center justify-between p-24 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 ">
             <h2 className="relative text-2xl text-center font-bold text-nowrap	">Currency Exchange</h2>
-     
 
-        <div className="relative md:px-12 md:py-12 md:grid md:grid-cols-2  w-auto  md:w-auto  bg-white rounded-xl mb-12">
-
-
+        <div className="relative md:px-12 md:py-12 md:grid md:grid-cols-2  w-full  md:w-full  bg-white rounded-xl mb-12">
 
           <div className='relative  flex flex-col px-4 py-4'>
             <label className="ml-4  mx-auto text-2xl text-black font-bold">Amount</label>
@@ -195,7 +184,7 @@ export default function Home() {
           </div>
 
             
-            <h3 className="px-4 py-4 text-center md:ml-6 text-black text-xl font-bold  md:text-nowrap text-balance">{rate}</h3>
+            <h3 className="text-center  text-black text-xl font-bold   text-balance">{rate}</h3>
         </div>
         <Footer />
 
