@@ -16,6 +16,17 @@ export default function Home() {
   const [editingField, setEditingField] = useState('amount'); // Track which field is being edited
   const [rate, setRate] = useState(''); // print rate of each conversion based on currency
 
+  const[isValid, setIsValid]=useState(true);
+
+  const handleInputChange=(e)=>
+  {
+    const {value}=e.target;
+    const isValid = /^[0-9]*$/.test(value); // Check if the input contains only numbers
+    setIsValid(isValid);
+
+  }
+
+
   //populate dropdown data
   const handleSelection = async () => {
     try {
@@ -77,21 +88,29 @@ export default function Home() {
 
 
   const handleInputAmount = (e) => {
-    setRate('')
-    const value = e.target.value;
-    setInputValue(value);
-    setEditingField('amount')
-    handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'amount');
+    setRate('');
+    const { value } = e.target;
+    const isValid = /^[0-9]*$/.test(value); // Check if the input contains only numbers
+    setIsValid(isValid);
+    if (isValid) {
+      setInputValue(value);
+      setEditingField('amount');
+      handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'amount');
+    }
 
   }
 
 
   const handleInputConverted = (e) => {
-    setRate('')
-    const value = e.target.value;
-    setConvertedAmount(value);
-    setEditingField('convertedAmount')
-    handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'convertedAmount');
+    setRate('');
+    const { value } = e.target;
+    const isValid = /^[0-9]*$/.test(value); // Check if the input contains only numbers
+    setIsValid(isValid);
+    if (isValid) {
+      setConvertedAmount(value);
+      setEditingField('convertedAmount');
+      handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'convertedAmount');
+  }
   }
 
 
@@ -138,14 +157,13 @@ export default function Home() {
             <h2 className="relative text-2xl text-center font-bold text-nowrap	">Currency Exchange</h2>
      
 
-        <div className="relative md:px-12 md:py-12 md:grid md:grid-cols-2  w-auto  md:w-auto   bg-white rounded-xl mb-12">
+        <div className="relative md:px-12 md:py-12 md:grid md:grid-cols-2  w-auto  md:w-auto  bg-white rounded-xl mb-12">
 
 
 
           <div className='relative  flex flex-col px-4 py-4'>
             <label className="ml-4  mx-auto text-2xl text-black font-bold">Amount</label>
-            <Input searchQuery={inputValue} handleChange={handleInputAmount} type="number"
-              pattern="[0-9]*" />
+            <Input searchQuery={inputValue} isValid={isValid} handleChange={handleInputAmount}/>
 
             {dropdownOpen && (
               <Dropdown
@@ -162,8 +180,7 @@ export default function Home() {
           <div className='relative flex flex-col px-4 py-4'>
             <label className="ml-4  mx-auto text-2xl text-black font-bold">Converted to</label>
 
-            <Input searchQuery={convertedAmount} handleChange={handleInputConverted} type="number"
-              pattern="[0-9]*" />
+            <Input searchQuery={convertedAmount} isValid={isValid} handleChange={handleInputConverted}  />
 
             {dropdownOpen && (
               <Dropdown
