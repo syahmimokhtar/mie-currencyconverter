@@ -60,7 +60,7 @@ export default function Home() {
           response = await api.get(`/pair/${toCurrency.value}/${fromCurrency.value}/${amount}`, { headers: headers });
           data = response.data
           setInputValue(data.conversion_result.toFixed(2));
-          conversionRate= `1.000 ${fromCurrency.value} = ${data.conversion_rate.toFixed(2)}  ${toCurrency.value} (Last Updated:  ${data.time_last_update_utc})`
+          conversionRate= `1.000 ${toCurrency.value} = ${data.conversion_rate.toFixed(2)}  ${fromCurrency.value} (Last Updated:  ${data.time_last_update_utc})`
 
         }
         setRate(conversionRate);
