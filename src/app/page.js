@@ -79,31 +79,51 @@ export default function Home() {
   };
 
 
+  // const handleInputAmount = (e) => {
+  //   setRate('');
+  //   const { value } = e.target;
+  //   const isValid = /^[0-9]*$/.test(value); // Check if the input contains only numbers
+  //   setIsValid(isValid);
+  //   if (isValid) {
+  //     setInputValue(value);
+  //     setEditingField('amount');
+  //     handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'amount');
+  //   }
+
+  // }
+
+
+  // const handleInputConverted = (e) => {
+  //   setRate('');
+  //   const { value } = e.target;
+  //   const isValid = /^[0-9]*$/.test(value); // Check if the input contains only numbers
+  //   setIsValid(isValid);
+  //   if (isValid) {
+  //     setConvertedAmount(value);
+  //     setEditingField('convertedAmount');
+  //     handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'convertedAmount');
+  // }
+  // }
+
+
   const handleInputAmount = (e) => {
     setRate('');
     const { value } = e.target;
-    const isValid = /^[0-9]*$/.test(value); // Check if the input contains only numbers
-    setIsValid(isValid);
-    if (isValid) {
-      setInputValue(value);
-      setEditingField('amount');
-      handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'amount');
-    }
+    const cleanedValue = value.replace(/\D/g, ''); // Remove any non-digit characters
+    setInputValue(cleanedValue);
+    setEditingField('amount');
+    handleConversionRate(cleanedValue, selectedCurrency, selectedConvertedCurrency, 'amount');
+};
 
-  }
+const handleInputConverted = (e) => {
+  setRate('');
+  const { value } = e.target;
+  const cleanedValue = value.replace(/\D/g, ''); // Remove any non-digit characters
+  setConvertedAmount(cleanedValue);
+  setEditingField('convertedAmount');
+  handleConversionRate(cleanedValue, selectedCurrency, selectedConvertedCurrency, 'convertedAmount');
+};
 
-
-  const handleInputConverted = (e) => {
-    setRate('');
-    const { value } = e.target;
-    const isValid = /^[0-9]*$/.test(value); // Check if the input contains only numbers
-    setIsValid(isValid);
-    if (isValid) {
-      setConvertedAmount(value);
-      setEditingField('convertedAmount');
-      handleConversionRate(value, selectedCurrency, selectedConvertedCurrency, 'convertedAmount');
-  }
-  }
 
 
   // Handle from currency dropdown change
